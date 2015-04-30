@@ -26,6 +26,8 @@ class Solver:
 
     matrixCache = [];
 
+    solution = [];
+
     # Retrieve a puzzle from the server. Returns JSON.
     def getPuzzle(self):
         url = '{0}/{1}/{2}/puzzle'.format(self.BASE_URL, self.API_KEY, self.ENV)
@@ -33,26 +35,42 @@ class Solver:
 
     # Solution by Sagar J to solve the cimplress grid solver
 
-    def check(self, row, col , neigh):
-        i = row;
-        j = col;
+    def check(self, col , row , neigh):
+        print 'Checking for neighborhood ' + str(neigh)
+        for i in range(col, col+neigh):
+            for j in range(row, row+neigh):
 
-        while self.matrixCache[row][col] != 0
+                if(self.matrixCache[i][j] == 0):
+                    for p in range(col, col+neigh-1):
+                        for q in range(row, row+neigh-1):
+                            self.matrixCache[p][q] = 0
 
 
-        return 0
+                return (neigh-1)
+
+        self.check(col, row, neigh+1)
+
+    def solver(self,i,j):
+        for row in range(j , puzzle['height']):
+            for col in range(i, puzzle['width']):
+                if(self.matrixCache[col][row] == 1):
+                    size = self.check(col, row, 2)
+                    self.solution.append({'X': col, 'Y': row, 'Size': size})
+                    row = row + size
+                    col = col + size
 
     def solve(self, puzzle):
-        solution = []
+
         self.matrixCache = numpy.zeros((puzzle['height'],puzzle['width']))
 
         for row in range(0, puzzle['height']):
             for col in range(0, puzzle['width']):
-                if puzzle['puzzle'][row][col]:
-                    #solution.append({'X': col, 'Y': row, 'Size': 1})
-                    self.matrixCache[row][col] = 1
-                    #print self.matrixCache
-        return solution
+                if puzzle['puzzle'][col][row]:
+                    self.matrixCache[col][row] = 1
+
+        self.solver(0, 0)
+
+        return self.solution
 
     # Submit the solution. Returns JSON results.
     def submitSolution(self, id, squares):
@@ -78,7 +96,7 @@ print 'Generating solution'
 squares = s.solve(puzzle)
 
 print 'Submitting solution'
-#jsonResult = s.submitSolution(puzzle['id'], squares)
+jsonResult = s.submitSolution(puzzle['id'], squares)
 
 # Describe the response
 response = json.loads(jsonResult);
