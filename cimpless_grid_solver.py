@@ -31,11 +31,15 @@ class Solver:
         url = '{0}/{1}/{2}/puzzle'.format(self.BASE_URL, self.API_KEY, self.ENV)
         return requests.get(url).text
 
-    # Your solution algorithm!
-    # Here is a naive solution that just covers each grid cell with a square of size 1.
-    # Returns an array of arrays for convenient conversion to JSON.
+    # Solution by Sagar J to solve the cimplress grid solver
 
-    def check(self, row, col):
+    def check(self, row, col , neigh):
+        i = row;
+        j = col;
+
+        while self.matrixCache[row][col] != 0
+
+
         return 0
 
     def solve(self, puzzle):
@@ -45,9 +49,9 @@ class Solver:
         for row in range(0, puzzle['height']):
             for col in range(0, puzzle['width']):
                 if puzzle['puzzle'][row][col]:
-                    solution.append({'X': col, 'Y': row, 'Size': 1})
+                    #solution.append({'X': col, 'Y': row, 'Size': 1})
                     self.matrixCache[row][col] = 1
-                    print self.matrixCache
+                    #print self.matrixCache
         return solution
 
     # Submit the solution. Returns JSON results.
@@ -74,7 +78,7 @@ print 'Generating solution'
 squares = s.solve(puzzle)
 
 print 'Submitting solution'
-jsonResult = s.submitSolution(puzzle['id'], squares)
+#jsonResult = s.submitSolution(puzzle['id'], squares)
 
 # Describe the response
 response = json.loads(jsonResult);
