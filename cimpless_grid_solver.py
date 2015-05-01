@@ -51,8 +51,8 @@ class Solver:
         self.check(col, row, neigh+1)
 
     def solver(self,i,j):
-        for row in range(j , puzzle['height']):
-            for col in range(i, puzzle['width']):
+        for col in range(i , puzzle['width']):
+            for row in range(i, puzzle['height']):
                 if(self.matrixCache[col][row] == 1):
                     size = self.check(col, row, 2)
                     self.solution.append({'X': col, 'Y': row, 'Size': size})
@@ -61,10 +61,10 @@ class Solver:
 
     def solve(self, puzzle):
 
-        self.matrixCache = numpy.zeros((puzzle['height'],puzzle['width']))
+        self.matrixCache = numpy.zeros((puzzle['width'],puzzle['height']))
 
-        for row in range(0, puzzle['height']):
-            for col in range(0, puzzle['width']):
+        for col in range(0, puzzle['width']):
+            for row in range(0, puzzle['height']):
                 if puzzle['puzzle'][col][row]:
                     self.matrixCache[col][row] = 1
 
