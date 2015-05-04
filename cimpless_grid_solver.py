@@ -35,29 +35,39 @@ class Solver:
 
     # Solution by Sagar J to solve the cimplress grid solver
 
-    def check(self, col , row , neigh):
-        print 'Checking for neighborhood ' + str(neigh)
-        for i in range(col, col+neigh):
-            for j in range(row, row+neigh):
+    def nullifySquare(self, col, row, neigh):
+         for p in range(col, col+neigh):
+            for q in range(row, row+neigh):
+                if(p < puzzle['width'] and q < puzzle['height']):
+                    self.matrixCache[p][q] = 0
 
-                if(self.matrixCache[i][j] == 0):
-                    for p in range(col, col+neigh-1):
-                        for q in range(row, row+neigh-1):
-                            self.matrixCache[p][q] = 0
+    def checkSquare(self, col, row, size):
+        print "Checking for square Validity at: " + str(col) + " " + str(row) + " size : " + str(size)
+        for p in range(col, col+size):
+            for q in range(row, row+size):
+                if(p + size > puzzle['width'] or q + size > puzzle['height'] or self.matrixCache[p][q] == 0):
+                    return 0;
+        return 1;
 
 
-                return (neigh-1)
-
-        self.check(col, row, neigh+1)
+    def check(self, col , row ):
+        neigh = 0
+        while self.checkSquare(col, row, neigh):
+            neigh = neigh + 1
+        self.nullifySquare(col, row, neigh)
+        return neigh
 
     def solver(self,i,j):
         for col in range(i , puzzle['width']):
             for row in range(i, puzzle['height']):
                 if(self.matrixCache[col][row] == 1):
-                    size = self.check(col, row, 2)
-                    self.solution.append({'X': col, 'Y': row, 'Size': size})
-                    row = row + size
-                    col = col + size
+                    size = self.check(col, row)
+                    print "Size : " + str(size+1) + "  x, y : " + str(col) + "," +  str(row)
+                    self.solution.append({'X': col, 'Y': row, 'Size': size+1})
+                    if((row + size + 1) <= puzzle['height']):
+                        row = row + size
+                    if((col + size + 1) <= puzzle['width']):
+                        col = col + size
 
     def solve(self, puzzle):
 
@@ -65,10 +75,11 @@ class Solver:
 
         for col in range(0, puzzle['width']):
             for row in range(0, puzzle['height']):
-                if puzzle['puzzle'][col][row]:
+                if puzzle['puzzle'][row][col]:
                     self.matrixCache[col][row] = 1
 
         self.solver(0, 0)
+        print self.matrixCache.shape
 
         return self.solution
 
