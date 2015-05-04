@@ -36,13 +36,14 @@ class Solver:
     # Solution by Sagar J to solve the cimplress grid solver
 
     def nullifySquare(self, col, row, neigh):
+         print "nullifying Square at {0} , {1} in {2} neighborhood".format(col , row , neigh)
          for p in range(col, col+neigh):
             for q in range(row, row+neigh):
                 if(p < puzzle['width'] and q < puzzle['height']):
                     self.matrixCache[p][q] = 0
 
     def checkSquare(self, col, row, size):
-        print "Checking for square Validity at: " + str(col) + " " + str(row) + " size : " + str(size)
+        print "Checking for square Validity at: {0},{1} with size {2}".format(col,row,size)
         for p in range(col, col+size):
             for q in range(row, row+size):
                 if(p + size > puzzle['width'] or q + size > puzzle['height'] or self.matrixCache[p][q] == 0):
@@ -58,16 +59,23 @@ class Solver:
         return neigh
 
     def solver(self,i,j):
-        for col in range(i , puzzle['width']):
-            for row in range(i, puzzle['height']):
+        col = i
+        row = j
+
+        while col < puzzle['width']:
+            while row < puzzle['height']:
                 if(self.matrixCache[col][row] == 1):
+                    print " Iteration number : {0}".format(row*col)
                     size = self.check(col, row)
-                    print "Size : " + str(size+1) + "  x, y : " + str(col) + "," +  str(row)
+                    print "Found Square of Size : {0} at {1} , {2}".format(size+1, col, row);
                     self.solution.append({'X': col, 'Y': row, 'Size': size+1})
                     if((row + size + 1) <= puzzle['height']):
                         row = row + size
                     if((col + size + 1) <= puzzle['width']):
                         col = col + size
+                else:
+                    col = col+1;
+                    row = row+1;
 
     def solve(self, puzzle):
 
@@ -112,9 +120,13 @@ jsonResult = s.submitSolution(puzzle['id'], squares)
 # Describe the response
 response = json.loads(jsonResult);
 if len(response['errors']) > 0:
-    print 'Your solution failed with {0} problems and used {1} squares.'.format(
+    print 'Your solution failed with {0} problems and used {1} squares. score:{2} time Penalty: {3}'.format(
            len(response['errors']),
-           response['numberOfSquares'])
+           response['numberOfSquares'],
+           response['score'],
+           response['timePenalty'])
+    for i in range(0 , len(response['errors'])):
+        print response['errors'][i]
 else:
     print 'Your solution succeeded with {0} squares, for a score of {1}, with a time penalty of {2}.'.format(
            response['numberOfSquares'],
