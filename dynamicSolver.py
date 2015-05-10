@@ -59,8 +59,9 @@ class Solver:
                     subsolverMat[col][row] = interim +1
                     if(subsolverMat[col][row] > maxSize):
                         maxSize = subsolverMat[col][row]
-                        subsquareRow = row - maxSize
-                        subsquareCol = col - maxSize
+                        subsquareRow = row - maxSize+1
+                        subsquareCol = col - maxSize+1
+        print subsolverMat
 
         if maxSize > 1:
             self.nullifySquare(subsquareCol, subsquareRow, maxSize)
