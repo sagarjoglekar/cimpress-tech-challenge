@@ -59,8 +59,8 @@ class Solver:
                     subsolverMat[col][row] = interim +1
                     if(subsolverMat[col][row] > maxSize):
                         maxSize = subsolverMat[col][row]
-                        subsquareRow = row - maxSize+1
-                        subsquareCol = col - maxSize+1
+                        subsquareRow = row - maxSize + 1
+                        subsquareCol = col - maxSize + 1
         print subsolverMat
 
         if maxSize > 1:
@@ -74,7 +74,7 @@ class Solver:
 
     def findOneSquares(self):
         for col in range (0, numpy.size(self.matrixCache[0:,0])):
-            for row in range (1, numpy.size(self.matrixCache[0,0:])):
+            for row in range (0, numpy.size(self.matrixCache[0,0:])):
                 if self.matrixCache[col][row] == 1 :
                     self.solution.append({'X': col, 'Y': row, 'Size': 1})
 
